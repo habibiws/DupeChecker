@@ -2,7 +2,7 @@
 class Config:
     # Dataset Configuration  
     # Path ke dataset Anda
-    DATASET_PATH = "/AirbnbData"
+    DATASET_PATH = "./AirbnbData"
     IMAGE_SIZE = (224, 224)  # Ukuran gambar yang akan diproses
     BATCH_SIZE = 32  # Batch size untuk training
     

@@ -9,12 +9,26 @@ class DataPreprocessor:
         self.config = config
         
     def load_and_preprocess_image(self, image_path):
-        """Load dan preprocess gambar"""
-        image = tf.io.read_file(image_path)
-        image = tf.image.decode_image(image, channels=3)
-        image = tf.image.resize(image, self.config.IMAGE_SIZE)
-        image = tf.cast(image, tf.float32) / 255.0
-        return image
+        """Load dan preprocess gambar dengan penanganan error"""
+        try:
+            image = tf.io.read_file(image_path)
+            # Gunakan decode_jpeg atau decode_png jika Anda tahu formatnya, 
+            # jika tidak decode_image lebih fleksibel.
+            image = tf.image.decode_image(image, channels=3, expand_animations=False)
+        
+            # PENTING: Set shape secara manual setelah decode
+            # Ini adalah perbaikan utama untuk error 'contains no shape'
+            image.set_shape([None, None, 3])
+
+            image = tf.image.resize(image, self.config.IMAGE_SIZE)
+            image = tf.cast(image, tf.float32) / 255.0
+            return image
+        except Exception as e:
+            # Jika terjadi error saat memproses satu gambar, cetak peringatan
+            # dan kembalikan gambar kosong (placeholder) agar proses tidak berhenti total.
+            tf.print(f"Error processing image {image_path}: {e}")
+            # Kembalikan tensor hitam dengan shape yang benar
+            return tf.zeros((*self.config.IMAGE_SIZE, 3))
     
     def create_pairs(self, image_paths, labels):
         """Membuat pairs untuk Siamese Network"""

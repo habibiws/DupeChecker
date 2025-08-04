@@ -94,7 +94,7 @@ def detect_duplicates():
     detector = DuplicateDetector(config.MODEL_SAVE_PATH, config)
     
     # TODO: Ganti dengan path folder yang ingin dicek
-    folder_path = "/AirbnbData/Test Data"  # Ganti dengan path folder yang sesuai
+    folder_path = "./AirbnbData/Test Data"  # Ganti dengan path folder yang sesuai
     
     # Cari duplikasi
     duplicates = detector.find_duplicates_in_folder(folder_path)
